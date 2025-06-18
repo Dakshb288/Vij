@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - V‑Edit</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0f0f0f;
+      color: white;
+      padding: 2rem;
+    }
+
+    .dashboard-container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-info img {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 2px solid #8b5cf6;
+    }
+
+    .user-info span {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .logout-button {
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .welcome {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #8b5cf6, #d946ef);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .license-info {
+      font-size: 0.9rem;
+      color: #bbb;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <div class="user-info" id="userDetails">
+        <!-- Google info goes here -->
+      </div>
+      <button class="logout-button" id="logoutBtn">
+        <i data-lucide="log-out"></i>
+        Logout
+      </button>
+    </div>
+
+    <div class="welcome">Welcome to your dashboard 👋</div>
+    <div class="license-info" id="licenseInfo">Checking license...</div>
+
+    <!-- Your dashboard content goes here -->
+    <p style="color:#aaa;">You can now submit videos, manage orders, or contact support.</p>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const user = JSON.parse(localStorage.getItem("googleUser"));
+    const license = localStorage.getItem("license");
+    const email = localStorage.getItem("email");
+
+    // 🔐 Protect access
+    if (!user || !license || !email) {
+      window.location.href = "/paywall.html";
+    }
+
+    // Show user info
+    const userDetails = document.getElementById("userDetails");
+    userDetails.innerHTML = `
+      <img src="${user.picture}" alt="${user.name}" />
+      <span>${user.name}</span>
+    `;
+
+    // Show license info
+    document.getElementById("licenseInfo").innerText =
+      `Active subscription for ${email}\nLicense: ${license.slice(0, 8)}...`;
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>
